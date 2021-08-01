@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
-    "test": "jest --verbose"
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand"
   },
   "author": "",
   "license": "ISC",
@@ -17,9 +18,11 @@
     "nodemon": "^2.0.12"
   },
   "devDependencies": {
-    "jest": "^27.0.6"
+    "cross-env": "^7.0.3",
+    "jest": "^27.0.6",
+    "supertest": "^6.1.4"
   },
   "jest": {
-      "testEnvironment": "node"
+    "testEnvironment": "node"
   }
 }
