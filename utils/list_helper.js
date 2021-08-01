@@ -7,6 +7,17 @@ const totalLikes = (blogs) => blogs.reduce((acc, blog) => {
   return acc + blog.likes 
 }, 0) 
 
+const favoriteBlog = (blogs) => {
+  return blogs.reduce((acc, blog) => {
+    let currentBlog = {
+      title: blog.title,
+      author: blog.author,
+      likes: blog.likes 
+    }
+    return (acc.likes || 0) < currentBlog.likes ? currentBlog : acc 
+  }, {})
+}
+
 const mostBlogs = (blogs) => {
   let authorBlogs = {}
   blogs.forEach(blog => {
@@ -43,6 +54,7 @@ const mostLikes = (blogs) => {
 module.exports = {
   dummy,
   totalLikes,
+  favoriteBlog,
   mostBlogs,
   mostLikes
 }

@@ -1,6 +1,6 @@
 const listHelper = require('../utils/list_helper')
 
-describe('mostLikes test suite', () => {
+describe('favoriteBlogs test suite', () => {
   const blogs = [
     {
       _id: "5a422a851b54a676234d17f7",
@@ -52,29 +52,26 @@ describe('mostLikes test suite', () => {
     }  
   ]
 
-  test('multiple blog entries, multiple authors', () => {
-    let result = listHelper.mostLikes(blogs)
+  test('multiple blog entries', () => {
+    let result = listHelper.favoriteBlog(blogs)
     expect(result).toMatchObject({
-      author: "Edsger W. Dijkstra",
-      likes: 17
-    })
-  })
-
-  test('multiple blog entries, single author', () => {
-    let result = listHelper.mostLikes([ blogs[1], blogs[2] ])
-    expect(result).toMatchObject({
-      author: "Edsger W. Dijkstra",
-      likes: 17
-    })
-  })
-
-  test('single blog entry', () => {
-    let result = listHelper.mostLikes([ blogs[2] ])
-    expect(result).toMatchObject({
+      title: "Canonical string reduction",
       author: "Edsger W. Dijkstra",
       likes: 12
     })
   })
 
+  test('single blog entries', () => {
+    let result = listHelper.favoriteBlog([ blogs[0] ])
+    expect(result).toMatchObject({
+      title: "React patterns",
+      author: "Michael Chan",
+      likes: 7,
+    })
+  })
 
+  test('empty set blog entries', () => {
+    let result = listHelper.favoriteBlog([ ])
+    expect(result).toMatchObject({})
+  })
 })
