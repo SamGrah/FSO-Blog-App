@@ -1,11 +1,31 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
+const defaults = require('superagent-defaults')
 const app = require('../app')
 const Blog = require('../models/blog')
 const initialBlogs = require('./initialBlogs.json')
 const testHelper = require('./test_helper')
 
-const api = supertest(app)
+const api = defaults(supertest(app))
+
+beforeAll(async () => {
+  await api.post("/api/users").send({
+    username: "test",
+    name: "test name",
+    password: "test"
+  })
+
+
+  const loginRequestBody = {
+    "username": "test",
+    "password": "test"
+  }
+
+  const response = await api.post("/api/login").send(loginRequestBody)  
+  const createdUser = response.body
+
+  api.set({"Authorization": `Bearer ${createdUser.token}`})
+})
 
 beforeEach(async () => {
   await Blog.deleteMany({})
@@ -19,14 +39,13 @@ describe('api suite tests', () => {
   test('blogs are assign a unique identifier', async () => {
     const newBlog = {...testHelper.newBlogJSON}
     const response = await api.post('/api/blogs').send(newBlog)
-    console.log(response.body)
     const newBlogEntry = response.body
     expect(newBlogEntry.id).toBeDefined()
   })
 
   test('new blog added', async () => {
     let newBlog = {...testHelper.newBlogJSON}
-    await api
+    const testResponse = await api
       .post('/api/blogs')
       .send(newBlog)
       .expect(201)
