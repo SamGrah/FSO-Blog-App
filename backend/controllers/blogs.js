@@ -12,26 +12,32 @@ const getTokenFrom = request => {
   return null
 }
 
+const userVerification = async (request, response) => {
+  const token = getTokenFrom(request) 
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+  if (!token || !decodedToken.id) {
+    response.status(401).json({ error: 'token missing or invalid' })
+    return false
+  }
+  return await User.findById(decodedToken.id)
+}
+
 blogRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user')
   response.status(200).json(blogs)
 })
 
 blogRouter.post('/', async (request, response) => {
-  const body = request.body
-  const token = getTokenFrom(request)
-  const decodedToken = jwt.verify(token, process.env.SECRET)
-  if (!token || !decodedToken.id) {
-    return response.status(401).json({ error: 'token missing or invalid' })
-  }
-  const user = await User.findById(decodedToken.id)
+  const validUser = await userVerification(request, response) 
+  if (!validUser) return;
 
+  const body = request.body
   const formattedBlog = new Blog({
     title: body.title,
     author: body.author, 
     url: body.url,
     likes: body.likes,
-    user: user._id 
+    user: validUser._id 
   })
 
   const createdBlog = await formattedBlog.save()
@@ -39,15 +45,30 @@ blogRouter.post('/', async (request, response) => {
 })
 
 blogRouter.delete('/:id', async (request, response) => {
+  const validUser = userVerification(request, response)
+  if (!validUser) return;
+
   await Blog.findByIdAndRemove(request.params.id)
   response.status(204).end()
 })
 
-blogRouter.put('/:id', async (request, response) => {
-  const id = request.params.id
+blogRouter.put('/', async (request, response) => {
+  const validUser = await userVerification(request, response)
+  if (!validUser) return;
+
   const opt = { new: true }
+
+  const body = request.body
+  const id = body.id
+  const formattedBlog = {
+    title: body.title,
+    author: body.author, 
+    url: body.url,
+    likes: body.likes,
+    user: validUser._id 
+  }
   
-  const updatedBlog = await Blog.findByIdAndUpdate(id, request.body, opt)
+  const updatedBlog = await Blog.findByIdAndUpdate(id, formattedBlog, opt)
   response.status(200).json(updatedBlog)
 })
 
