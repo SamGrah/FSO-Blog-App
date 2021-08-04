@@ -1,0 +1,29 @@
+.baseClass {
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.error {
+  color: red;
+}
+
+.success {
+  color: green;
+}
+
+.inform {
+  color: yellow;
+}
+
+.blog {
+  border-width: 1px;
+  border-style: solid;
+  border-color: black;
+  margin-top: 3px;
+  padding-top: 10px;
+  padding-bottom: 1px;
+}
