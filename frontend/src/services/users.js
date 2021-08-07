@@ -6,6 +6,11 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
+const getUser = (id) => {
+  const request = axios.get(`${baseUrl}/${id}`)
+  return request.then(response => response.data) 
+}
+
 const submitLogin = (username, password) => {
   const submittedInfo = {
     username,

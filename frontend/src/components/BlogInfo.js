@@ -1,32 +1,28 @@
 import React from 'react'
-import blogService from '../services/blogs'
+import { useSelector, useDispatch } from 'react-redux'
+import { incrementLikes, remove } from '../reducers/blogReducer'
+import { displayBannerMsg } from '../reducers/messageReducer'
 
-const BlogInfo = ({ blog, setMsgInfo, setBlogs }) => {
+const BlogInfo = ({ blog }) => {
+  const loggedInUser = useSelector(state => state.login)
+  const dispatch = useDispatch() 
 
   const removeBlog = (blog) => async () => {
     if (!window.confirm(`Remove blog ${blog.title}?`)) return;
-    await blogService.remove(blog)
-    const updatedBlogList = await blogService.getAll()
-    console.log(updatedBlogList)
-    setBlogs(updatedBlogList)
-    setMsgInfo({
-      className: 'success',
-      message: `Deleted blog "${blog.title}"`
-    })
+    dispatch(remove(blog))
+    dispatch(displayBannerMsg(`Deleted blog "${blog.title}"`))
   }
 
-  const incrementLikes = (blog) => async () => {
-    let currentBlog = {...blog, likes: blog.likes + 1}
-    await blogService.update(blog.id, currentBlog)
-    let updatedBlogList = await blogService.getAll()
-    setBlogs(updatedBlogList)
+  const likeBlog = (blog) => () =>  {
+    dispatch(incrementLikes(blog))
   }
 
   const blogRemovalBtn = (blog) => {
-    const currentUser = window.localStorage.getItem('loggedBlogappUser')
-    if (blog.user.id === JSON.parse(currentUser).id) {
+    if (blog.user.id === loggedInUser.id) {
       return (
-        <button className="removeBtn" onClick={removeBlog(blog)}>remove</button>
+        <button className="removeBtn" onClick={removeBlog(blog)}>
+          remove
+        </button>
       ) 
     }
     return;
@@ -37,7 +33,9 @@ const BlogInfo = ({ blog, setMsgInfo, setBlogs }) => {
       <div>{blog.url}</div>
       <div>
         likes: {blog.likes}
-        <button className="likeBtn" onClick={incrementLikes(blog)}>like</button>
+        <button className="likeBtn" onClick={likeBlog(blog)}>
+          like
+        </button>
       </div>
       <div>{blog.user.name}</div>
       {blogRemovalBtn(blog)}

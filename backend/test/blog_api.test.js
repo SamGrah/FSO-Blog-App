@@ -94,8 +94,7 @@ describe('api suite tests', () => {
     const modifiedBlog = {...firstBlog, title: "new value"}
     delete modifiedBlog.id
 
-    let response = await api.put(`/api/blogs/${id}`).send(modifiedBlog)
-
+    const response = await api.put(`/api/blogs/${id}`).send(modifiedBlog)
     expect(response.body.title).toBe("new value")
   })
 

@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import Togglable from './Togglable'
 import BlogInfo from './BlogInfo'
 
-const Blog = ({ blog, setMsgInfo, setBlogs}) => { 
+const Blog = ({ blog }) => { 
 
   const blogInfoRef = useRef()
 
@@ -12,9 +12,7 @@ const Blog = ({ blog, setMsgInfo, setBlogs}) => {
                  hideBtnTxt="hide"
                  showBtnTxt="view"  
                  ref={blogInfoRef}>
-        <BlogInfo blog={blog}
-                  setMsgInfo={setMsgInfo}
-                  setBlogs={setBlogs} />
+        <BlogInfo blog={blog} />
       </Togglable>
     </div>  
   )

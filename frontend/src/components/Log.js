@@ -1,32 +1,31 @@
 import React, { useState } from 'react'
 import userService from '../services/users'
 import blogService from '../services/blogs'
+import { useSelector, useDispatch } from 'react-redux'
+import { loginUser } from '../reducers/loginReducer'
+import { displayErrorMsg } from '../reducers/messageReducer'
 
-const Log = ({ user, setUser, setMsgInfo }) => {  
+const Log = ({ setMsgInfo }) => {  
   let [userName, setUserName] = useState('')
   let [password, setPassword] = useState('')
+
+  const state = useSelector(state => state)
+  const dispatch = useDispatch()
 
   const formSubmission = async (event) => {
     event.preventDefault() 
     try {
       const userDbData = await userService.submitLogin(userName, password)
-
-      window.localStorage.setItem(
-        'loggedBlogappUser', JSON.stringify(userDbData)
-      )
       blogService.setToken(userDbData.token)
-      setUser(userDbData)
+      dispatch(loginUser(userDbData))
       setUserName('')
       setPassword('')
     } catch (exception) {
-      setMsgInfo({
-        className: 'error', 
-        message: `Wrong username or password`
-      })
+      dispatch(displayErrorMsg('Wrong username or password'))
     }
   }
 
-  if (user) return <div></div>
+  if (state.login.token) return <div></div>
   return (
     <div>
       <h2>log in to application</h2>

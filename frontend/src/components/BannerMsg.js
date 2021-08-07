@@ -1,13 +1,13 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 
 const BannerMsg = ({ msgInfo, setMsgInfo}) => {
-  if (!msgInfo) return <div></div>
-
-  setTimeout(() => setMsgInfo(), 3500)
+  const message = useSelector(state => state.message)
+  if (!message.display) return <div></div>
 
   return (
-    <div className={"baseClass " + msgInfo.className}>
-      {msgInfo.message}
+    <div className={"baseClass " + message.className}>
+      {message.text}
     </div>
   )
 }
