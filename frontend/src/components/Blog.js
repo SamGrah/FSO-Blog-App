@@ -1,20 +1,12 @@
-import React, { useRef } from 'react'
-import Togglable from './Togglable'
-import BlogInfo from './BlogInfo'
+import React from 'react'
+import { Link } from 'react-router-dom'
 
 const Blog = ({ blog }) => { 
-
-  const blogInfoRef = useRef()
-
   return (
-    <div className="blog">
-      <Togglable title={`${blog.title} ${blog.author}`} 
-                 hideBtnTxt="hide"
-                 showBtnTxt="view"  
-                 ref={blogInfoRef}>
-        <BlogInfo blog={blog} />
-      </Togglable>
-    </div>  
+    <div>
+      <Link to={`blogs/${blog.id}`}>{blog.title}</Link><em>
+        &nbsp;&nbsp;{blog.author}</em>
+    </div>    
   )
 }
 

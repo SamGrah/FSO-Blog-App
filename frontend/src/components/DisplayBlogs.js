@@ -4,6 +4,7 @@ import Togglable from './Togglable'
 import CreateBlogForm from './CreateBlogForm'
 import { useSelector, useDispatch } from 'react-redux'
 import { logoutUser } from '../reducers/loginReducer'
+import { Table, Button } from 'react-bootstrap'
 
 const DisplayBlogs = (props) => {
   const blogFormRef = useRef()
@@ -25,18 +26,22 @@ const DisplayBlogs = (props) => {
   return (
     <div>
       <h2>blogs</h2>
-      <div>
-        {state.login.name} logged in
-        <button onClick={logout}>logout</button>
-      </div><br />
       <Togglable showBtnTxt='create new blog' 
                  hideBtnTxt='cancel' 
                  ref={blogFormRef}>
         <CreateBlogForm toggleCreateForm={toggleCreateForm} />
       </Togglable>
-      <div>
-        {sortedBlogs.map(blog =><Blog key={blog.id} blog={blog} />)}
-      </div>
+      <Table striped>
+        <tbody>
+        {sortedBlogs.map(blog =>{
+          return (  
+            <tr key={blog.id}>
+              <td><Blog blog={blog} /></td>
+            </tr>
+          ) 
+        })}
+        </tbody>
+      </Table>
     </div>
   )
 }

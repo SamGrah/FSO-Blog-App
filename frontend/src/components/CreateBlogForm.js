@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { createNew } from '../reducers/blogReducer'
-import { displayBannerMsg } from '../reducers/messageReducer'
+import { Button } from 'react-bootstrap'
 
 const CreateBlogForm = (props) => {
   const [title, setTitle] = useState('')
@@ -23,8 +23,6 @@ const CreateBlogForm = (props) => {
     setTitle('')
     setAuthor('')
     setUrl('')
-    const msg = `a new blog ${newBlog.title} by ${newBlog.author} added`
-    dispatch(displayBannerMsg(msg))
     props.toggleCreateForm()
   } 
 
@@ -42,7 +40,7 @@ const CreateBlogForm = (props) => {
         <input id="url_input"
                value={url} 
                onChange={({target}) => setUrl(target.value)} />
-        <br /><button id='blog_submit_btn' type="submit">create</button>
+        <br /><Button id='blog_submit_btn' type="submit">create</Button>
       </form>
     </div>
   )

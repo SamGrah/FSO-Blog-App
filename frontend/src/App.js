@@ -1,16 +1,21 @@
 import './App.css'
-import React, { useState, useEffect } from 'react'
-import DisplayBlogs from './components/DisplayBlogs'
-import Log from './components/Log'
-import BannerMsg from './components/BannerMsg'
+import React, { useEffect } from 'react'
+import {
+  BrowserRouter as Router,
+  Switch, Route
+} from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
 import blogService from './services/blogs'
 import { getAllBlogs } from './reducers/blogReducer'
-import { useSelector, useDispatch } from 'react-redux'
+import NavBar from './components/NavBar'
+import Home from './components/Home'
+import Users from './components/Users'
+import User from './components/User'
+import Log from './components/Log'
+import BlogInfo from './components/BlogInfo'
 
 const App = () => {
-  const [msgInfo, setMsgInfo] = useState('')
-
-  const loggedInUserInfo = useSelector(state => state.login)
+  const loggedInUser = useSelector(state => state.login)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -19,14 +24,27 @@ const App = () => {
     })
   }, [])
 
-  useEffect(() => blogService.setToken(loggedInUserInfo.token), []) 
-   
+  useEffect(() => blogService.setToken(loggedInUser.token), []) 
+
+  if (!loggedInUser.token) return <Log />
   return (
-    <div>
-      <BannerMsg msgInfo={msgInfo} setMsgInfo={setMsgInfo} />
-      <Log setMsgInfo={setMsgInfo} />
-       <DisplayBlogs setMsgInfo={setMsgInfo} />    
-    </div>
+    <Router>
+      <NavBar />
+      <Switch>
+        <Route path="/users/:id">
+         <User />
+        </Route>
+        <Route path="/users">
+          <Users />
+        </Route>
+        <Route path="/blogs/:id">
+          <BlogInfo />
+        </Route>
+        <Route path='/'>
+          <Home />
+        </Route>
+      </Switch>
+    </Router>
   )
 }
 

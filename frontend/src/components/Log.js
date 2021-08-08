@@ -4,8 +4,9 @@ import blogService from '../services/blogs'
 import { useSelector, useDispatch } from 'react-redux'
 import { loginUser } from '../reducers/loginReducer'
 import { displayErrorMsg } from '../reducers/messageReducer'
+import { Form, Button } from 'react-bootstrap'
 
-const Log = ({ setMsgInfo }) => {  
+const Log = () => {  
   let [userName, setUserName] = useState('')
   let [password, setPassword] = useState('')
 
@@ -29,15 +30,19 @@ const Log = ({ setMsgInfo }) => {
   return (
     <div>
       <h2>log in to application</h2>
-      <form onSubmit={formSubmission}>
-        <label>username</label>
-        <input value={userName}
-               onChange={({target}) => setUserName(target.value)}/><br />
-        <label>password</label>
-        <input value={password}
-               onChange={({target}) => setPassword(target.value)} /><br />
-        <button id="login_btn" type="submit">Submit</button>
-      </form>  
+      <Form onSubmit={formSubmission}>
+        <Form.Group>
+        <Form.Label>username</Form.Label>
+        <Form.Control 
+          value={userName}
+          onChange={({target}) => setUserName(target.value)}/><br />
+        <Form.Label>password</Form.Label>
+        <Form.Control
+          value={password}
+          onChange={({target}) => setPassword(target.value)} /><br />
+        <Button id="login_btn" type="submit">Submit</Button>
+        </Form.Group>
+      </Form>  
     </div>  
   )
 } 

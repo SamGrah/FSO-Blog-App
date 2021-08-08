@@ -1,4 +1,5 @@
 import blogService from '../services/blogs'
+import { displayErrorMsg, displayBannerMsg } from './messageReducer'  
 
 export const getAllBlogs = () => {
   return async dispatch => {
@@ -12,11 +13,17 @@ export const getAllBlogs = () => {
 
 export const createNew = (newBlog) => {
   return async dispatch => {
-    const updatedBlog = await blogService.create(newBlog)
-    dispatch({
-      type: 'CREATE_NEW',
-      data: updatedBlog 
-    })
+    try { 
+      const updatedBlog = await blogService.create(newBlog)
+      dispatch({
+        type: 'CREATE_NEW',
+        data: updatedBlog 
+      })
+      const msg = `a new blog ${newBlog.title} by ${newBlog.author} added`
+      dispatch(displayBannerMsg(msg))
+    } catch (error) {
+      dispatch(displayErrorMsg(error.response.data.error))
+    } 
   }
 } 
 

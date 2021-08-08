@@ -20,5 +20,9 @@ const submitLogin = (username, password) => {
   return request.then(response => response.data)
 }
 
-const users = { getAll, submitLogin }
+const users = { 
+  getAll, 
+  submitLogin,
+  getUser
+}
 export default users 
